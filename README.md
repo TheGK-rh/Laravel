@@ -27,11 +27,10 @@ POSTGRES_DB=データベース名：任意のデータベース名に変更し�
 POSTGRES_USER=ユーザー名：任意のユーザー名に変更してください。
 ```
 
-2. 下記コマンドを実行
+2. 下記コマンドを実行  
 **必要なコマンドは下記コマンドが実行します。**
 ```
 make create-project
-
-コマンド実行完了後、http://localhost:${HTTP_PORT_HOST}にアクセスしてLaravelのデフォルトウェルカムページが表示されるか確認してください。
-デフォルトでは（http://localhost:9000）にアクセス。
 ```
+コマンド実行完了後、http://localhost:${HTTP_PORT_HOST} にアクセスしてLaravelのデフォルトウェルカムページが表示されるか確認してください。  
+デフォルトでは http://localhos:9000
