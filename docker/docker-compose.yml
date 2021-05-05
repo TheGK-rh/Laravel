@@ -1,0 +1,50 @@
+version: "3"
+services:
+  app:
+    build:
+      context: ./php
+      args:
+        - PHP_OPCACHE_VALIDATE_TIMESTAMPS=${PHP_OPCACHE_VALIDATE_TIMESTAMPS}
+        - PHP_UPSTREAM_PORT=${PHP_UPSTREAM_PORT}
+    volumes:
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+
+  nginx:
+    build:
+      context: ./nginx
+      args:
+        - PHP_UPSTREAM_CONTAINER=${PHP_UPSTREAM_CONTAINER}
+        - PHP_UPSTREAM_PORT=${PHP_UPSTREAM_PORT}
+    ports:
+      - ${HTTP_PORT_HOST}:80
+    volumes:
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      - ./nginx/sites:/etc/nginx/sites-available
+
+# MYSQL
+  db:
+    build: ./mysql
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - ${MYSQL_DB_PORT}:3306
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: ${MYSQL_RANDOM_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+# POSTGRESQL
+  # db:
+  #   build: ./postgres
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+  #   ports:
+  #     - ${POSTGRES_DB_PORT}:5432
+  #   environment:
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     POSTGRES_USER: ${POSTGRES_USER}
+
+volumes:
+  db-data:
