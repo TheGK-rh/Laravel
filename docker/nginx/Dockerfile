@@ -3,6 +3,10 @@ FROM nginx:1.20-alpine
 
 COPY nginx.conf /etc/nginx/
 
+# TODO:修正
+RUN apk update && \
+  apk add --update --no-cache --virtual=.build-dependencies g++
+
 RUN apk --no-cache add tzdata \
   && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
   && apk del tzdata
@@ -23,5 +27,7 @@ COPY --from=node /usr/local/bin /usr/local/bin
 COPY --from=node /usr/local/lib /usr/local/lib
 # yarn command
 COPY --from=node /opt /opt
+
+WORKDIR /var/www
 
 CMD ["nginx"]
