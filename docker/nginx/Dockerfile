@@ -1,3 +1,4 @@
+FROM node:16-alpine as node
 FROM nginx:1.20-alpine
 
 COPY nginx.conf /etc/nginx/
@@ -15,5 +16,12 @@ ARG PHP_UPSTREAM_PORT=9001
 
 RUN echo "upstream php-upstream { server ${PHP_UPSTREAM_CONTAINER}:${PHP_UPSTREAM_PORT}; }" > /etc/nginx/conf.d/upstream.conf \
   && rm /etc/nginx/conf.d/default.conf
+
+# node command
+COPY --from=node /usr/local/bin /usr/local/bin
+# npm command
+COPY --from=node /usr/local/lib /usr/local/lib
+# yarn command
+COPY --from=node /opt /opt
 
 CMD ["nginx"]
