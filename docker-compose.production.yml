@@ -1,0 +1,12 @@
+version: "3"
+services:
+    app:
+        build:
+            context: .
+            dockerfile: ./docker/php/Dockerfile.production
+    nginx:
+        build:
+            context: .
+            dockerfile: ./docker/nginx/Dockerfile.production
+        ports:
+            - 8000:80

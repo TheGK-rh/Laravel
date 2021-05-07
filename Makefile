@@ -64,3 +64,6 @@ create-project:
 	cd docker && docker compose exec app php artisan key:generate
 	cd docker && docker compose exec app php artisan storage:link
 	cd docker && docker compose exec app chmod -R 777 storage bootstrap/cache
+production:
+	docker compose -f docker-compose.production.yml build --no-cache
+	docker compose -f docker-compose.production.yml up -d
