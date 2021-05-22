@@ -6,6 +6,16 @@
 * DBの選択  
 デフォルトではMySQLの使用を前提にしています。  
 PostgreSQLを使用する場合は`docker-compose.yml`の`#MYSQL`をコメントアウトし、`#POSTGRESQL`のコメントアウトを外してください。
+LaravelのDB設定は`MySQL`のため、PostgreSQLを使用する場合は設定を変更してください。
+
+**M1 Macユーザーの方へ**  
+2021.05.22時点  
+Resettaをインストールしていない場合（インストールしない方がいいですが）、MySQLのDocker imageがエラーで使用できません。  
+`docker-compose.yml`に記載している、`platform`のコメントアウトを外して使用してください。  
+https://github.com/TheGK-rh/laravel/blob/166918b8114b4c459ab6ced7fc600f45a8dff11c/docker/docker-compose.yml#L27
+```
+platform: linux/x86_64　と指定することで、使用できます。
+```
 
 ### 環境構築手順
 
