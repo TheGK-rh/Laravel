@@ -24,6 +24,7 @@ services:
 # MYSQL
   db:
     build: ./mysql
+    # platform: linux/x86_64 (M1 MAC用)
     volumes:
       - db-data:/var/lib/mysql
     ports:
