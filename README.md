@@ -43,4 +43,4 @@ POSTGRES_USER=ユーザー名：任意のユーザー名に変更してくださ
 make create-project
 ```
 コマンド実行完了後、http://localhost:${HTTP_PORT_HOST} にアクセスしてLaravelのデフォルトウェルカムページが表示されるか確認してください。  
-デフォルトでは http://localhos:9000
+デフォルトでは http://localhost:9000
