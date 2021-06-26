@@ -4,7 +4,6 @@ services:
     build:
       context: ./php
       args:
-        - PHP_OPCACHE_VALIDATE_TIMESTAMPS=${PHP_OPCACHE_VALIDATE_TIMESTAMPS}
         - PHP_UPSTREAM_PORT=${PHP_UPSTREAM_PORT}
     volumes:
       - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
@@ -24,7 +23,7 @@ services:
 # MYSQL
   db:
     build: ./mysql
-    # platform: linux/x86_64 (M1 MAC用)
+    # platform: linux/x86_64
     volumes:
       - db-data:/var/lib/mysql
     ports:
@@ -49,3 +48,8 @@ services:
 
 volumes:
   db-data:
+
+# networks:
+#   default:
+#     external:
+#       name: laravel-network

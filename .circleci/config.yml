@@ -7,41 +7,45 @@ workflows:
   build-and-deploy:
     jobs:
       - aws-ecr/build-and-push-image:
-        account-url: AWS_ECR_ACCOUNT_URL
-        aws-access-key-id: AWS_ACCESS_KEY_ID
-        aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-        repo: nginx_repository_name
-        tag: "${CIRCLE_SHA1}"
-        path: ./docker/nginx
-        dockerfile: "Dockerfile.production"
-        filters:
-          branches:
-            only:
-              - main
-
-      - aws-ecr/build-and-push-image:
-        account-url: AWS_ECR_ACCOUNT_URL
-        aws-access-key-id: AWS_ACCESS_KEY_ID
-        aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-        repo: app_repository_name
-        tag: "${CIRCLE_SHA1}"
-        path: ./docker/php
-        dockerfile: "Dockerfile.production"
-        filters:
-          branches:
-            only:
-              - main
-
-      - aws-ecs/deploy-service-update:
-          requires:
-            - aws-ecr/build-and-push-image
-          family: 'yourTaskName'
-          service-name: 'yourServiceName'
-          cluster-name: 'yourClusterName'
-          container-image-name-updates:
-            - 'container=nginx,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:${CIRCLE_SHA1}'
-            - 'container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/app:${CIRCLE_SHA1}'
+          name: 'aws-ecr/build-and-push-image-nginx'
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          repo: YOUR-REPO-NAME-$CIRCLE_BRANCH
+          tag: "${CIRCLE_SHA1}"
+          path: .
+          dockerfile: "/docker/nginx/Dockerfile.production"
           filters:
             branches:
               only:
                 - main
+                - develop
+
+      - aws-ecr/build-and-push-image:
+          name: 'aws-ecr/build-and-push-image-app'
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          repo: YOUR-REPO-NAME-$CIRCLE_BRANCH
+          tag: "${CIRCLE_SHA1}"
+          path: .
+          dockerfile: "/docker/php/Dockerfile.production"
+          filters:
+            branches:
+              only:
+                - main
+                - develop
+
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image-nginx
+            - aws-ecr/build-and-push-image-app
+          family: 'YOUR-ECS-TASK-NAME'
+          service-name: 'YOUR-ECS-SERVICE-NAME'
+          cluster-name: 'YOUR-ECS-CLUSTERß-NAME'
+          container-image-name-updates: 'container=nginx,image-and-tag=${AWS_ECR_ACCOUNT_URL}/YOUR-REPO-NAME-${CIRCLE_BRANCH}:${CIRCLE_SHA1},container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/YOUR-REPO-NAME-${CIRCLE_BRANCH}:${CIRCLE_SHA1}'
+          filters:
+            branches:
+              only:
+                - main
+                - develop
